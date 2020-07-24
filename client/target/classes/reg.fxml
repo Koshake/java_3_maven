@@ -1,0 +1,21 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<VBox fx:controller="client.RegController"
+      xmlns:fx="http://javafx.com/fxml" alignment="center" >
+    <stylesheets>
+        <URL value="@/style.css"/>
+    </stylesheets>
+
+    <Label text="Login" alignment="TOP_LEFT"/>
+    <TextField fx:id="loginField" HBox.hgrow="ALWAYS" promptText="login"/>
+    <Label text="Password"/>
+    <PasswordField fx:id="passwordField" HBox.hgrow="ALWAYS" promptText="password"/>
+    <Label text="nickname"/>
+    <TextField fx:id="nickField" HBox.hgrow="ALWAYS" promptText="Nickname"/>
+    <TextArea fx:id="textArea" VBox.vgrow="ALWAYS" editable="false"/>
+    <HBox alignment="BASELINE_RIGHT">
+        <Button  text="Create account" onAction="#tryToReg" minWidth="50"/>
+        <Button  text="Cancel"  onAction="#clickCancelBtn" minWidth="50"/>
+    </HBox>
+</VBox>

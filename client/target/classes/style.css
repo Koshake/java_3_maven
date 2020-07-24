@@ -1,0 +1,62 @@
+#buttonSend {
+    -fx-background-color: #33DAFF;
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+#buttonSend:hover {
+    -fx-background-color: #99FF33;
+}
+
+.button {
+    -fx-background-color: #F1C40F;
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 6px;
+}
+
+.button:hover {
+    -fx-background-color: #C4F10F;
+}
+
+.text-field {
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+.text-field:hover {
+    -fx-border-color: #99FF33;
+    -fx-border-radius: 5px;
+}
+
+.text-area {
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+.text-area .content {
+    -fx-background-color: #D6EAF8;
+}
+
+#clientList {
+    -fx-border-color: #A833FF;
+    -fx-border-radius: 5px;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #00F;
+    -fx-text-fill: white;
+}
+.list-cell {
+-fx-text-fill: black;
+ }
+.list-cell:odd {
+ -fx-background-color: #D6EAF8;
+  }
+.list-cell:even {
+ -fx-background-color: #EBF5FB;
+  }
+.list-cell:filled:hover {
+    -fx-background-color: #00F;
+    -fx-text-fill: white;
+}
+
