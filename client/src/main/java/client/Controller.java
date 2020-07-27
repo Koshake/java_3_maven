@@ -48,9 +48,11 @@ public class Controller implements Initializable {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private HistoryHandler historyHandler;
 
     private boolean authenticated;
     private String nick;
+    private String login;
 
     private Stage stage;
     private Stage regStage;
@@ -60,6 +62,7 @@ public class Controller implements Initializable {
     final String END = "/end";
     final String REG_RESULT = "/regresult ";
     final String CLIENTS_LIST = "/clientlist ";
+    final int historyLen = 100;
 
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
@@ -138,7 +141,10 @@ public class Controller implements Initializable {
 
                         if (str.startsWith(AUTH_OK)) {
                             nick = str.split("\\s")[1];
+                            login = str.split("\\s")[2];
                             setAuthenticated(true);
+                            historyHandler = new HistoryHandler(login);
+                            textArea.appendText(historyHandler.readHistory(historyLen));
                             break;
                         }
 
@@ -175,6 +181,7 @@ public class Controller implements Initializable {
 
                         } else {
                             textArea.appendText(str + "\n");
+                            historyHandler.writeToHistoryFile(str + "\n");
                         }
 
                     }
@@ -186,6 +193,7 @@ public class Controller implements Initializable {
                     try {
                         in.close();
                         out.close();
+                        historyHandler.closeFileWriter();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

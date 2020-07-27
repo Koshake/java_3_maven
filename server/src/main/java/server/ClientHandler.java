@@ -51,7 +51,7 @@ public class ClientHandler {
                             if (newNick != null) {
                                 if(!server.isLoginAuthorized(login)) {
 
-                                    sendMsg(AUTH_OK + newNick);
+                                    sendMsg(AUTH_OK + newNick + " " + login);
                                     nick = newNick;
 
                                     server.subscribe(this);
