@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler {
     Server server;
@@ -14,7 +16,7 @@ public class ClientHandler {
     DataOutputStream out;
 
     private String nick;
-    private String login;
+    private String login = null;
 
     public ClientHandler(Server server, Socket socket) {
         try {
@@ -31,8 +33,8 @@ public class ClientHandler {
             final int AUTH_WORDS_COUNT = 3;
             final int PRIVATE_WORDS_COUNT = 3;
             final  int TIMEOUT = 120000;
-
-            new Thread(() -> {
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            service.execute(new Thread(() -> {
                 try {
                     socket.setSoTimeout(TIMEOUT);
                     //цикл аутентификации
@@ -96,15 +98,12 @@ public class ClientHandler {
                             out.writeUTF(END);
                             break;
                         }
-
                         server.broadcastMsg(this, str);
                     }
                 } catch (SocketTimeoutException e) {
                     sendMsg(END);
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
                 } finally {
                     System.out.println("Клиент отключился");
                     server.unsubscribe(this);
@@ -116,12 +115,12 @@ public class ClientHandler {
                     }
                     try {
                         socket.close();
+                        service.shutdown();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            }).start();
-
+            }));
         } catch (IOException e) {
             e.printStackTrace();
         }

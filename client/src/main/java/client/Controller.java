@@ -183,7 +183,6 @@ public class Controller implements Initializable {
                             textArea.appendText(str + "\n");
                             historyHandler.writeToHistoryFile(str + "\n");
                         }
-
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -193,7 +192,9 @@ public class Controller implements Initializable {
                     try {
                         in.close();
                         out.close();
-                        historyHandler.closeFileWriter();
+                        if (historyHandler != null) {
+                            historyHandler.closeFileWriter();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

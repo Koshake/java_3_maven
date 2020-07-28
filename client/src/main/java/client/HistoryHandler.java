@@ -47,6 +47,6 @@ public class HistoryHandler {
     }
 
     public void closeFileWriter() throws IOException {
-        fileWriter.close();
+            fileWriter.close();
     }
 }
