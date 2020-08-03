@@ -23,44 +23,55 @@ public class DataBaseAuthService implements  AuthService {
     }
 
     @Override
-    public String getNicknameByLoginAndPassword(String login, String password) throws SQLException {
-        ResultSet rs = stmt.executeQuery("SELECT * FROM chat;");
+    public String getNicknameByLoginAndPassword(String login, String password) {
         String nick = null;
-        while (rs.next()) {
-            if (rs.getString("login").equals(login)
-                    && rs.getString("password").equals(password)) {
-                nick = rs.getString("nickname");
-                break;
+        try {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM chat;");
+            while (rs.next()) {
+                if (rs.getString("login").equals(login)
+                        && rs.getString("password").equals(password)) {
+                    nick = rs.getString("nickname");
+                    break;
+                }
             }
+            rs.close();
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
-        rs.close();
-        return nick;
+        finally{
+            return nick;
+        }
     }
 
     @Override
-    public boolean registration(String login, String password, String nickname) throws SQLException {
-       ResultSet rs = stmt.executeQuery("SELECT * FROM chat;");
-       while (rs.next()) {
-           if (rs.getString("login").equals(login)
-                   && rs.getString("nickname").equals(nickname)) {
-               return false;
-           }
-           if (rs.getString("login").equals(login)
-                   && rs.getString("password").equals(password)) {
-               psUpdate.setString(1, nickname);
-               psUpdate.setString(2, rs.getString("nickname"));
-               psUpdate.executeUpdate();
-               rs.close();
-               return true;
-           }
-       }
+    public boolean registration(String login, String password, String nickname) {
+        try {
+            ResultSet rs = stmt.executeQuery("SELECT * FROM chat;");
+            while (rs.next()) {
+                if (rs.getString("login").equals(login)
+                        && rs.getString("nickname").equals(nickname)) {
+                    return false;
+                }
+                if (rs.getString("login").equals(login)
+                        && rs.getString("password").equals(password)) {
+                    psUpdate.setString(1, nickname);
+                    psUpdate.setString(2, rs.getString("nickname"));
+                    psUpdate.executeUpdate();
+                    rs.close();
+                    return true;
+                }
+            }
 
-        psInsert.setString(1, login);
-        psInsert.setString(2, password);
-        psInsert.setString(3, nickname);
-        psInsert.executeUpdate();
-        rs.close();
-        return true;
+            psInsert.setString(1, login);
+            psInsert.setString(2, password);
+            psInsert.setString(3, nickname);
+            psInsert.executeUpdate();
+            rs.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void connect() throws ClassNotFoundException, SQLException {
