@@ -8,6 +8,7 @@ import java.net.SocketTimeoutException;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 public class ClientHandler {
     Server server;
@@ -57,14 +58,17 @@ public class ClientHandler {
                                     nick = newNick;
 
                                     server.subscribe(this);
-                                    System.out.printf("Клиент %s подключился \n", nick);
+                                    //System.out.printf("Клиент %s подключился \n", nick);
+                                    Server.logger.log(Level.INFO, String.format("Клиент %s подключился \n", nick));
                                     socket.setSoTimeout(0);
                                     break;
                                 } else {
                                     sendMsg("С этим логином уже авторизовались!");
+                                    Server.logger.log(Level.INFO, "Повторное использование логина");
                                 }
                             } else {
                                 sendMsg("Неверный логин / пароль");
+                                Server.logger.log(Level.INFO, "Был введен неверный логин / пароль");
                             }
                         }
 
@@ -76,8 +80,10 @@ public class ClientHandler {
                             boolean b = server.getAuthService().registration(token[1], token[2], token[3]);
                             if (b) {
                                 sendMsg(REG_RESULT + "ok");
+                                Server.logger.log(Level.INFO, "Регистрация прошла упешно!");
                             } else {
                                 sendMsg(REG_RESULT + "failed");
+                                Server.logger.log(Level.INFO, "Регистрация провалена!");
                             }
                         }
                     }
@@ -105,7 +111,8 @@ public class ClientHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    System.out.println("Клиент отключился");
+                    //System.out.println("Клиент отключился");
+                    Server.logger.log(Level.INFO, "Клиент отключился");
                     server.unsubscribe(this);
                     try {
                         in.close();
